@@ -3,6 +3,7 @@ from lighthouse import LighthouseRunner
 from threading import Timer, Thread
 from os import listdir, urandom
 from os.path import isfile, join, exists
+from urllib.parse import urlparse
 import webbrowser
 import json
 import datetime
@@ -81,12 +82,19 @@ def process_list(path, links, is_mobile):
     print('STARTING BATCH!')
     results = {}
     factor = 'mobile' if is_mobile else 'desktop'
-    for link in links:
-        print('processing '+link)
-        report = LighthouseRunner(link, form_factor=factor, quiet=True).report
-        results[link] = report.score
-        results[link]['metrics'] = report.metrics
-        print(link+' done')
+    length = len(links)
+    for idx, link in enumerate(links):
+        parsed_url = urlparse(link)
+        if parsed_url.scheme:
+            print('(%s/%s) processing %s' % (idx+1,length,link))
+            try:
+                report = LighthouseRunner(link, form_factor=factor, quiet=True).report
+                results[link] = report.score
+                results[link]['metrics'] = report.metrics
+            except:
+                print('(%s/%s) Lighthouse error: %s' % (idx+1,length,link))
+        else:
+            print('(%s/%s) invalid link: %s' % (idx+1,length,link))
 
     data['links'] = results
     data['done'] = True
