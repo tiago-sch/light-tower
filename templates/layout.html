@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %}{% endblock %} - LightTower</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+  <body>
+    <div class="w-full max-w-xs m-auto max-w-3xl">
+      <h1 class="font-bold text-3xl text-center mt-10 mb-10">Light Tower</h1>
+
+      <ul class="flex w-full justify-around mb-10 p-4 bg-gray-100 rounded shadow-lg">
+        <li class="mr-6">
+          <a class="text-blue-500 hover:text-blue-800 {%- if request.path == '/' %} font-bold underline{% endif %}" href="/">Batch Form</a>
+        </li>
+        <li class="mr-6">
+          <a class="text-blue-500 hover:text-blue-800 {%- if request.path == '/results' %} font-bold underline{% endif %}" href="/results">Results</a>
+        </li>
+      </ul>
+
+      {% if msg %}
+        <p class="w-full p-6 mb-10 mt-2 bg-green-300 rounded overflow-hidden shadow-lg font-bold">
+          {{ msg }}
+        </p>
+      {% endif %}
+
+      {% block content %}{% endblock %}
+
+    </div>
+  </body>
+</html>

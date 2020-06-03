@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+  <table class="table-auto w-full">
+    <thead>
+      <tr>
+        <th>Batch Name</th>
+        <th>Platform</th>
+        <th>Done</th>
+        <th></th>
+      </tr>
+    </thead>
+    {% for result in results %}
+      <tr>
+        <td class="border px-4 py-2">
+          {{ result['name'] }}
+        </td>
+        <td class="border px-4 py-2 text-center">
+          {% if result['mobile'] %}
+            📱
+          {% else %}
+            💻
+          {% endif %}
+        </td>
+        <td class="border px-4 py-2 text-center">
+          {% if result['done'] %}
+            ✅
+          {% else %}
+            ❌
+          {% endif %}
+        </td>
+        <td class="border px-4 py-2 text-center">
+          <a href="/results/{{ result['file'] }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Details
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

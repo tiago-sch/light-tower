@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Batch Form{% endblock %}
+
+{% block content %}
+  <form action="/" method="POST"/>
+    <div class="mb-5">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Batch Name <small>(required)</small></label>
+      <input
+        name="name"
+        id="name"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder="The name of the batch will be the same in the results"
+        required
+      />
+    </div>
+    <div class="mb-5">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="links">Links <small>(required)</small></label>
+      <textarea
+        name="links"
+        id="links"
+        rows="15"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder="Paste links list here, 1 per line"
+        required
+      ></textarea>
+    </div>
+    <div class="mb-5">
+      <label class="block text-gray-700 text-sm font-bold mb-2">
+        <input type="checkbox" name="mobile" class="mr-2" />
+        Mobile report
+      </label>
+    </div>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+  </form>
+{% endblock %}
