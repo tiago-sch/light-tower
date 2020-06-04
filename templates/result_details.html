@@ -74,40 +74,42 @@
     </tbody>
   </table>
 
-  <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Drilldown</h3>
-  <table class="table-auto w-full">
-    <thead>
-      <tr>
-        <th class="w-1/5 text-gray-600">Performance</th>
-        <th class="w-1/5 text-gray-600">Accessibility</th>
-        <th class="w-1/5 text-gray-600">Best Practices</th>
-        <th class="w-1/5 text-gray-600">SEO</th>
-        <th class="w-1/5 text-gray-600">PWA</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for results in data.links %}
+  {% if data.links %}
+    <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Drilldown</h3>
+    <table class="table-auto w-full mb-10">
+      <thead>
         <tr>
-          <td class="border px-4 py-2 font-bold" colspan="5">{{ results }}</td>
+          <th class="w-1/5 text-gray-600">Performance</th>
+          <th class="w-1/5 text-gray-600">Accessibility</th>
+          <th class="w-1/5 text-gray-600">Best Practices</th>
+          <th class="w-1/5 text-gray-600">SEO</th>
+          <th class="w-1/5 text-gray-600">PWA</th>
         </tr>
-        <tr>
-          <td class="border px-4 py-2 text-center">
-            {{ data.links[results].performance }}
-          </td>
-          <td class="border px-4 py-2 text-center">
-            {{ data.links[results].accessibility }}
-          </td>
-          <td class="border px-4 py-2 text-center">
-            {{ data.links[results]["best-practices"] }}
-          </td>
-          <td class="border px-4 py-2 text-center">
-            {{ data.links[results].seo }}
-          </td>
-          <td class="border px-4 py-2 text-center">
-            {{ data.links[results].pwa }}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for results in data.links %}
+          <tr>
+            <td class="border px-4 py-2 font-bold" colspan="5">{{ results }}</td>
+          </tr>
+          <tr>
+            <td class="border px-4 py-2 text-center">
+              {{ data.links[results].performance }}
+            </td>
+            <td class="border px-4 py-2 text-center">
+              {{ data.links[results].accessibility }}
+            </td>
+            <td class="border px-4 py-2 text-center">
+              {{ data.links[results]["best-practices"] }}
+            </td>
+            <td class="border px-4 py-2 text-center">
+              {{ data.links[results].seo }}
+            </td>
+            <td class="border px-4 py-2 text-center">
+              {{ data.links[results].pwa }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 {% endblock %}
