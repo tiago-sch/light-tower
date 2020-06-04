@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, redirect, url_for
 from lighthouse import LighthouseRunner
 from threading import Timer, Thread
@@ -84,8 +86,10 @@ def process_list(path, links, is_mobile):
     factor = 'mobile' if is_mobile else 'desktop'
     length = len(links)
     for idx, link in enumerate(links):
-        parsed_url = urlparse(link)
-        if parsed_url.scheme:
+        if link:
+            parsed_url = urlparse(link)
+            if not parsed_url.scheme:
+                link = join('https://', link)
             print('(%s/%s) processing %s' % (idx+1,length,link))
             try:
                 report = LighthouseRunner(link, form_factor=factor, quiet=True).report
@@ -94,7 +98,7 @@ def process_list(path, links, is_mobile):
             except:
                 print('(%s/%s) Lighthouse error: %s' % (idx+1,length,link))
         else:
-            print('(%s/%s) invalid link: %s' % (idx+1,length,link))
+            print('(%s/%s) invalid empty link: %s' % (idx+1,length,link))
 
     data['links'] = results
     data['done'] = True
@@ -109,7 +113,7 @@ def process_list(path, links, is_mobile):
 
 @app.route('/results', methods = ['GET'])
 def results():
-    all_files = [f for f in listdir(results_path) if isfile(join(results_path, f))]
+    all_files = [pos_json for pos_json in listdir(results_path) if pos_json.endswith('.json')]
     results = []
 
     for result_file in all_files:
@@ -131,38 +135,40 @@ def results_details(file_name):
     with open(file_path) as json_file:
         data = json.load(json_file)
 
-    performance = []
-    accessibility = []
-    best_practices = []
-    seo = []
-    pwa = []
-    first_meaningful_paint = []
-    interactive = []
-    speed_index = []
-    page_size = []
-
-    for link in data['links']:
-        values = data['links'][link]
-        performance.append(values['performance'])
-        accessibility.append(values['accessibility'])
-        best_practices.append(values['best-practices'])
-        seo.append(values['seo'])
-        pwa.append(values['pwa'])
-        first_meaningful_paint.append(values['metrics']['first-meaningful-paint'])
-        interactive.append(values['metrics']['interactive'])
-        speed_index.append(values['metrics']['speed-index'])
-        page_size.append(values['metrics']['page-size'])
-
     avg = {}
-    avg['performance'] = calc_average(performance)
-    avg['accessibility'] = calc_average(accessibility)
-    avg['best_practices'] = calc_average(best_practices)
-    avg['seo'] = calc_average(seo)
-    avg['pwa'] = calc_average(pwa)
-    avg['first-meaningful-paint'] = calc_average(first_meaningful_paint)
-    avg['interactive'] = calc_average(interactive)
-    avg['speed-index'] = calc_average(speed_index)
-    avg['page-size'] = calc_average(page_size)
+
+    if data.get('links') != None:
+        performance = []
+        accessibility = []
+        best_practices = []
+        seo = []
+        pwa = []
+        first_meaningful_paint = []
+        interactive = []
+        speed_index = []
+        page_size = []
+
+        for link in data['links']:
+            values = data['links'][link]
+            performance.append(values['performance'])
+            accessibility.append(values['accessibility'])
+            best_practices.append(values['best-practices'])
+            seo.append(values['seo'])
+            pwa.append(values['pwa'])
+            first_meaningful_paint.append(values['metrics']['first-meaningful-paint'])
+            interactive.append(values['metrics']['interactive'])
+            speed_index.append(values['metrics']['speed-index'])
+            page_size.append(values['metrics']['page-size'])
+
+        avg['performance'] = calc_average(performance)
+        avg['accessibility'] = calc_average(accessibility)
+        avg['best_practices'] = calc_average(best_practices)
+        avg['seo'] = calc_average(seo)
+        avg['pwa'] = calc_average(pwa)
+        avg['first-meaningful-paint'] = calc_average(first_meaningful_paint)
+        avg['interactive'] = calc_average(interactive)
+        avg['speed-index'] = calc_average(speed_index)
+        avg['page-size'] = calc_average(page_size)
 
     return render_template('result_details.html', data = data, avg = avg)
 
