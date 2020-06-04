@@ -15,6 +15,12 @@
     <h3 class="text-sm text-gray-600">{{ data.date }}</h3>
   </div>
 
+
+  {% if not data.avg and not data.links %}
+    <p class="text-gray-600 text-center">In process... 🤖</p>
+  {% endif %}
+
+  {% if avg %}
   <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Average</h3>
   <table class="table-auto w-full mb-3">
     <thead>
@@ -73,6 +79,7 @@
       </tr>
     </tbody>
   </table>
+  {% endif %}
 
   {% if data.links %}
     <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Drilldown</h3>
