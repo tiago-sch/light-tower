@@ -144,9 +144,12 @@ def results_details(file_name):
         seo = []
         pwa = []
         first_meaningful_paint = []
+        largest_contentful_paint = []
         interactive = []
         speed_index = []
         page_size = []
+        cumulative_layout_shift = []
+        total_blocking_time = []
 
         for link in data['links']:
             values = data['links'][link]
@@ -156,9 +159,12 @@ def results_details(file_name):
             seo.append(values['seo'])
             pwa.append(values['pwa'])
             first_meaningful_paint.append(values['metrics']['first-meaningful-paint'])
+            largest_contentful_paint.append(values['metrics']['largest-contentful-paint'])
             interactive.append(values['metrics']['interactive'])
             speed_index.append(values['metrics']['speed-index'])
             page_size.append(values['metrics']['page-size'])
+            cumulative_layout_shift.append(values['metrics']['cumulative-layout-shift'])
+            total_blocking_time.append(values['metrics']['total-blocking-time'])
 
         avg['performance'] = calc_average(performance)
         avg['accessibility'] = calc_average(accessibility)
@@ -166,15 +172,19 @@ def results_details(file_name):
         avg['seo'] = calc_average(seo)
         avg['pwa'] = calc_average(pwa)
         avg['first-meaningful-paint'] = calc_average(first_meaningful_paint)
+        avg['largest-contentful-paint'] = calc_average(largest_contentful_paint)
         avg['interactive'] = calc_average(interactive)
         avg['speed-index'] = calc_average(speed_index)
         avg['page-size'] = calc_average(page_size)
+        avg['cumulative-layout-shift'] = calc_average(cumulative_layout_shift, True)
+        avg['total-blocking-time'] = calc_average(total_blocking_time)
 
     return render_template('result_details.html', data = data, avg = avg)
 
 
-def calc_average(list):
-    return round(sum(list) / len(list), 2)
+def calc_average(list, is_index = False):
+    decimals = 3 if is_index else 2
+    return round(sum(list) / len(list), decimals)
 
 
 def open_browser():

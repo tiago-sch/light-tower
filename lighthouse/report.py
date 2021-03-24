@@ -57,9 +57,12 @@ class LighthouseReport(object):
 
         metrics = {}
         metrics['first-meaningful-paint'] = raw_metrics['firstMeaningfulPaint']
+        metrics['largest-contentful-paint'] = raw_metrics['largestContentfulPaint']
         metrics['interactive'] = raw_metrics['interactive']
         metrics['speed-index'] = raw_metrics['speedIndex']
-        metrics['page-size'] = resource_details['size']
+        metrics['total-blocking-time'] = raw_metrics['totalBlockingTime']
+        metrics['cumulative-layout-shift'] = raw_metrics['cumulativeLayoutShift']
+        metrics['page-size'] = resource_details['transferSize']
 
         return metrics
 

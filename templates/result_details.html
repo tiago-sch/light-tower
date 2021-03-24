@@ -3,120 +3,144 @@
 {% block title %}Results{% endblock %}
 
 {% block content %}
-  <div class="mb-8">
-    <h2 class="text-2xl">
-      {% if data.mobile %}
-        📱
-      {% else %}
-        💻
-      {% endif %}
-      {{ data.name }}
-    </h2>
-    <h3 class="text-sm text-gray-600">{{ data.date }}</h3>
-  </div>
+<div class="mb-8">
+  <h2 class="text-2xl">
+    {% if data.mobile %}
+    📱
+    {% else %}
+    💻
+    {% endif %}
+    {{ data.name }}
+  </h2>
+  <h3 class="text-sm text-gray-600">{{ data.date }}</h3>
+</div>
 
 
-  {% if not data.avg and not data.links %}
-    <p class="text-gray-600 text-center">In process... 🤖</p>
-  {% endif %}
+{% if not data.avg and not data.links %}
+<p class="text-gray-600 text-center">In process... 🤖</p>
+{% endif %}
 
-  {% if avg %}
-  <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Average</h3>
-  <table class="table-auto w-full mb-3">
-    <thead>
-      <tr>
-        <th class="w-1/5 text-gray-600">Performance</th>
-        <th class="w-1/5 text-gray-600">Accessibility</th>
-        <th class="w-1/5 text-gray-600">Best Practices</th>
-        <th class="w-1/5 text-gray-600">SEO</th>
-        <th class="w-1/5 text-gray-600">PWA</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.performance }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.accessibility }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.best_practices }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.seo }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.pwa }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+{% if avg %}
+<h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Average</h3>
+<table class="table-auto w-full mb-3">
+  <thead>
+    <tr>
+      <th class="w-1/5 text-gray-600">Performance</th>
+      <th class="w-1/5 text-gray-600">Accessibility</th>
+      <th class="w-1/5 text-gray-600">Best Practices</th>
+      <th class="w-1/5 text-gray-600">SEO</th>
+      <th class="w-1/5 text-gray-600">PWA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.performance }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.accessibility }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.best_practices }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.seo }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.pwa }}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <table class="table-auto w-full mb-10">
-    <thead>
-      <tr>
-        <th class="w-1/4 text-gray-600">First Meaningful Paint</th>
-        <th class="w-1/4 text-gray-600">Time to Interact</th>
-        <th class="w-1/4 text-gray-600">Speed Index</th>
-        <th class="w-1/4 text-gray-600">Page Size</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="border px-6 py-3 text-center">
-          {{ avg['first-meaningful-paint']|ms2s }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg.interactive|ms2s }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg['speed-index']|ms2s }}
-        </td>
-        <td class="border px-6 py-3 text-center">
-          {{ avg['page-size']|format_bytes }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  {% endif %}
+<table class="table-auto w-full mt-5">
+  <thead>
+    <tr>
+      <th class="w-1/3 text-gray-600">First Meaningful Paint</th>
+      <th class="w-1/3 text-gray-600">Largest Contentful Paint</th>
+      <th class="w-1/3 text-gray-600">Time to Interact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['first-meaningful-paint']|ms2s }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['largest-contentful-paint']|ms2s }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg.interactive|ms2s }}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  {% if data.links %}
-    <h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Drilldown</h3>
-    <table class="table-auto w-full mb-10">
-      <thead>
-        <tr>
-          <th class="w-1/5 text-gray-600">Performance</th>
-          <th class="w-1/5 text-gray-600">Accessibility</th>
-          <th class="w-1/5 text-gray-600">Best Practices</th>
-          <th class="w-1/5 text-gray-600">SEO</th>
-          <th class="w-1/5 text-gray-600">PWA</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for results in data.links %}
-          <tr>
-            <td class="border px-4 py-2 font-bold" colspan="5">{{ results }}</td>
-          </tr>
-          <tr>
-            <td class="border px-4 py-2 text-center">
-              {{ data.links[results].performance }}
-            </td>
-            <td class="border px-4 py-2 text-center">
-              {{ data.links[results].accessibility }}
-            </td>
-            <td class="border px-4 py-2 text-center">
-              {{ data.links[results]["best-practices"] }}
-            </td>
-            <td class="border px-4 py-2 text-center">
-              {{ data.links[results].seo }}
-            </td>
-            <td class="border px-4 py-2 text-center">
-              {{ data.links[results].pwa }}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
+<table class="table-auto w-full mb-10">
+  <thead>
+    <tr>
+      <th class="w-1/4 text-gray-600">Speed Index</th>
+      <th class="w-1/4 text-gray-600">Blocking Time</th>
+      <th class="w-1/4 text-gray-600">Page Size</th>
+      <th class="w-1/4 text-gray-600">CLS</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['speed-index']|ms2s }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['total-blocking-time']|ms2s }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['page-size']|format_bytes }}
+      </td>
+      <td class="border px-6 py-3 text-center">
+        {{ avg['cumulative-layout-shift'] }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}
+
+{% if data.links %}
+<h3 class="text-xl text-center px-6 py-3 font-bold" colspan="5">Drilldown</h3>
+<table class="table-auto w-full mb-10">
+  <thead>
+    <tr>
+      <th class="w-1/5 text-gray-600">Performance</th>
+      <th class="w-1/5 text-gray-600">Accessibility</th>
+      <th class="w-1/5 text-gray-600">Best Practices</th>
+      <th class="w-1/5 text-gray-600">SEO</th>
+      <th class="w-1/5 text-gray-600">PWA</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for results in data.links %}
+    <tr>
+      <td class="border px-4 py-2 font-bold" colspan="5">{{ results }}</td>
+    </tr>
+    <tr>
+      <td class="border px-4 py-2 text-center">
+        {{ data.links[results].performance }}
+      </td>
+      <td class="border px-4 py-2 text-center">
+        {{ data.links[results].accessibility }}
+      </td>
+      <td class="border px-4 py-2 text-center">
+        {{ data.links[results]["best-practices"] }}
+      </td>
+      <td class="border px-4 py-2 text-center">
+        {{ data.links[results].seo }}
+      </td>
+      <td class="border px-4 py-2 text-center">
+        {{ data.links[results].pwa }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
 {% endblock %}
